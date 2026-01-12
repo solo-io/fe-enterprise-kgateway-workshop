@@ -1,5 +1,9 @@
 # Changelog
 
+0.0.2 - (1-12-26)
+---
+- Added README.md
+
 0.0.1 - (1-12-26)
 ---
 - First commit
