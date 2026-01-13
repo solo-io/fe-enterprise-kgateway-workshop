@@ -1,5 +1,9 @@
 # Changelog
 
+0.0.3 - (1-13-26)
+---
+- Added `000-image-list.md`
+
 0.0.2 - (1-12-26)
 ---
 - Added README.md
