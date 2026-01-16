@@ -1,12 +1,18 @@
 ## Image list for Enterprise Kgateway
 
-**2.1.0-rc.1:**
+**2.1.0:**
+
+# Enterprise Kgateway CRD Helm chart
+- oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway-crds
+
+# Enterprise Kgateway Helm Chart
+- oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway
 
 # controller
-us-docker.pkg.dev/solo-public/enterprise-kgateway/enterprise-kgateway-controller:2.1.0-rc.1
+us-docker.pkg.dev/solo-public/enterprise-kgateway/enterprise-kgateway-controller:2.1.0
 
 # kgateway-proxy
-us-docker.pkg.dev/solo-public/enterprise-kgateway/envoy-wrapper:2.1.0-rc.1
+us-docker.pkg.dev/solo-public/enterprise-kgateway/envoy-wrapper:2.1.0
 
 # redis
 docker.io/redis:7.2.12-alpine

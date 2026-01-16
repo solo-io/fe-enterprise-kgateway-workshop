@@ -1,5 +1,11 @@
 # Changelog
 
+0.0.4 - (1-15-26)
+---
+- Update `ENTERPRISE_KGATEWAY_VERSION` to `2.1.0`
+- Update 000-image-list.md
+- Update image overrides with latest
+
 0.0.3 - (1-13-26)
 ---
 - Added `000-image-list.md`

@@ -55,7 +55,7 @@ Solo Trial License Key - Expires: X-XX-XX
 Export your Solo Trial license key variable and Enterprise Kgateway version
 ```bash
 export SOLO_TRIAL_LICENSE_KEY=$SOLO_TRIAL_LICENSE_KEY
-export GLOO_VERSION=2.1.0-rc.1
+export GLOO_VERSION=2.1.0
 ```
 
 ### Enterprise Kgateway CRDs
@@ -93,11 +93,26 @@ trafficpolicies.gateway.kgateway.dev
 ## Install Enterprise Kgateway Controller
 Using Helm:
 ```bash
-helm install enterprise-kgateway \
-  oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway \
-  --version $GLOO_VERSION \
-  --namespace enterprise-kgateway \
-  --set licensing.licenseKey=$SOLO_TRIAL_LICENSE_KEY
+helm upgrade -i -n enterprise-kgateway enterprise-kgateway oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway \
+--create-namespace \
+--version $GLOO_VERSION \
+--set-string licensing.licenseKey=$SOLO_TRIAL_LICENSE_KEY \
+-f -<<EOF
+#--- Optional: override for image registry/tag for the controller
+#image:
+#  registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
+#  repository: enterprise-kgateway-controller
+#  tag: "$GLOO_VERSION"
+#  pullPolicy: IfNotPresent
+# --- Override the default Kgateway parameters used by this GatewayClass
+# If the referenced parameters are not found, the controller will use the defaults
+gatewayClassParametersRefs:
+  enterprise-kgateway:
+    group: enterprisekgateway.solo.io
+    kind: EnterpriseKgatewayParameters
+    name: ingress-params
+    namespace: enterprise-kgateway
+EOF
 ```
 
 Check that the Enterprise Kgateway Controller is now running:
@@ -126,6 +141,12 @@ metadata:
   namespace: enterprise-kgateway
 spec:
   kube:
+    #--- Image overrides for deployment ---
+    #envoyContainer:
+    #  image:
+    #    registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
+    #    repository: envoy-wrapper
+    #    tag: "2.1.0"
     # --- uncomment to override service fields
     service:
       extraAnnotations:
@@ -136,6 +157,34 @@ spec:
         foo: bar
       type: LoadBalancer
       externalTrafficPolicy: Local
+    sharedExtensions:
+      extauth:
+        enabled: true
+        replicas: 1
+        #--- Image overrides for deployment ---
+        #container:
+        #  image:
+        #    registry: gcr.io
+        #    repository: gloo-mesh/ext-auth-service
+        #    tag: "0.71.4"
+      ratelimiter:
+        enabled: true
+        replicas: 1
+        #--- Image overrides for deployment ---
+        #container:
+        #  image:
+        #    registry: gcr.io
+        #    repository: gloo-mesh/rate-limiter
+        #    tag: "0.17.2"
+      extCache:
+        enabled: true
+        replicas: 1
+        #--- Image overrides for deployment ---
+        #container:
+        #  image:
+        #    registry: docker.io
+        #    repository: redis
+        #    tag: "7.2.12-alpine"
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
@@ -144,11 +193,6 @@ metadata:
   namespace: enterprise-kgateway
 spec:
   gatewayClassName: enterprise-kgateway
-  infrastructure:
-    parametersRef:
-      group: enterprisekgateway.solo.io
-      kind: EnterpriseKgatewayParameters
-      name: ingress-params
   listeners:
     - name: http
       port: 80

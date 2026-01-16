@@ -1,5 +1,7 @@
 # Enterprise Kgateway Workshop
 
+This workshop demonstrates Solo Enterprise for Kgateway with hands-on labs covering routing, security, and observability features.
+
 # Labs
 - [001-set-up-enterprise-kgateway.md](001-set-up-enterprise-kgateway.md)
 - [002-deploy-and-route-to-httpbin.md](002-deploy-and-route-to-httpbin.md)
@@ -59,7 +61,7 @@
 
 ## Validated on
 - Kubernetes 1.29.4 - 1.33.3
-- Enterprise Kgateway 2.1.0-rc.1
+- Enterprise Kgateway 2.1.0
 
 
 ## User Stories / Acceptance Criteria
