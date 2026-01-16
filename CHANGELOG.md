@@ -1,5 +1,9 @@
 # Changelog
 
+0.0.5 - (1-16-26)
+---
+- Minor updates
+
 0.0.4 - (1-15-26)
 ---
 - Update `ENTERPRISE_KGATEWAY_VERSION` to `2.1.0`
