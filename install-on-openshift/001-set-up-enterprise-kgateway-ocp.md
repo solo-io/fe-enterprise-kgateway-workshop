@@ -59,7 +59,7 @@ kubectl create namespace enterprise-kgateway
 ```bash
 helm upgrade -i --create-namespace --namespace enterprise-kgateway \
     --version $GLOO_VERSION enterprise-kgateway-crds \
-    oci://us-docker.pkg.dev/solo-public/gloo-gateway/charts/enterprise-kgateway-crds
+    oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway-crds
 ```
 
 To check if the Enterprise Kgateway CRDs are installed:
@@ -88,16 +88,17 @@ trafficpolicies.gateway.kgateway.dev
 ## Install Enterprise Kgateway Controller
 Using Helm:
 ```bash
-helm upgrade -i -n enterprise-kgateway enterprise-kgateway oci://us-docker.pkg.dev/solo-public/gloo-gateway/charts/enterprise-kgateway \
+helm upgrade -i -n enterprise-kgateway enterprise-kgateway oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway \
 --create-namespace \
 --version $GLOO_VERSION \
 --set-string licensing.licenseKey=$SOLO_TRIAL_LICENSE_KEY \
 -f -<<EOF
 #--- Optional: override for image registry/tag for the controller
-image:
-  registry: us-docker.pkg.dev/solo-public/gloo-gateway
-  tag: "$GLOO_VERSION"
-  pullPolicy: IfNotPresent
+#image:
+#  registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
+#  repository: enterprise-kgateway-controller
+#  tag: "$GLOO_VERSION"
+#  pullPolicy: IfNotPresent
 # --- Override the default Kgateway parameters used by this GatewayClass
 # If the referenced parameters are not found, the controller will use the defaults
 gatewayClassParametersRefs:
@@ -146,8 +147,13 @@ spec:
         sysctls:
         - name: net.ipv4.ip_unprivileged_port_start
           value: "0"
-    # --- Container-level security context for Envoy
+    # --- Container-level configuration for Envoy
     envoyContainer:
+      #--- Uncomment to override envoy proxy image ---
+      #image:
+      #  registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
+      #  repository: envoy-wrapper
+      #  tag: "2.1.0"
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
@@ -167,27 +173,30 @@ spec:
       extauth:
         enabled: true
         replicas: 1
-        container:
-          image:
-            registry: gcr.io
-            repository: gloo-mesh/ext-auth-service
-            tag: "0.71.4"
+        #--- Image overrides for deployment ---
+        #container:
+        #  image:
+        #    registry: gcr.io
+        #    repository: gloo-mesh/ext-auth-service
+        #    tag: "0.71.4"
       ratelimiter:
         enabled: true
         replicas: 1
-        container:
-          image:
-            registry: gcr.io
-            repository: gloo-mesh/rate-limiter
-            tag: "0.16.4"
+        #--- Image overrides for deployment ---
+        #container:
+        #  image:
+        #    registry: gcr.io
+        #    repository: gloo-mesh/rate-limiter
+        #    tag: "0.17.2"
       extCache:
         enabled: true
         replicas: 1
-        container:
-          image:
-            registry: docker.io
-            repository: redis
-            tag: "7.2.4-alpine"
+        #--- Image overrides for deployment ---
+        #container:
+        #  image:
+        #    registry: docker.io
+        #    repository: redis
+        #    tag: "7.2.12-alpine"
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
