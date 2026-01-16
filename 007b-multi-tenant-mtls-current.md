@@ -1,6 +1,6 @@
 ## Multi-Tenant mTLS with SNI Matching (Current Implementation)
 
-> **Note**: This exercise shows what ACTUALLY WORKS with the current Enterprise Kgateway API. Due to API limitations, true per-listener mTLS CA isolation is not supported. See `007b-multi-tenant-mtls-ideal.md` for the ideal API design.
+> **Note**: This exercise shows what ACTUALLY WORKS with the current Enterprise Kgateway API. Due to API limitations, true per-listener mTLS CA isolation is not supported.
 
 This guide demonstrates multi-tenant mTLS with SNI matching using the current API. While SNI-based routing works perfectly, all listeners share a common CA trust pool for mTLS validation.
 
@@ -587,4 +587,3 @@ EOF
 
 - Exercise 004: Basic SNI matching without mTLS
 - Exercise 007: Basic mTLS with single CA (foundation for this exercise)
-- Exercise 007b-ideal: What the API SHOULD look like for true per-tenant mTLS
