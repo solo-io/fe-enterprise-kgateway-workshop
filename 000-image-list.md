@@ -1,24 +1,49 @@
-## Image list for Enterprise Kgateway
+# Image list - Solo Enterprise for Kgateway
 
-**2.1.0:**
+**2.1.0**
 
-# Enterprise Kgateway CRD Helm chart
-- oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway-crds
+## Helm Charts
 
-# Enterprise Kgateway Helm Chart
-- oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway
+### Enterprise Kgateway CRD Helm chart
 
-# controller
+```bash
+oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway-crds
+```
+
+### Enterprise Kgateway Helm Chart
+
+```bash
+oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway
+```
+
+## Images
+
+### controller
+
+```bash
 us-docker.pkg.dev/solo-public/enterprise-kgateway/enterprise-kgateway-controller:2.1.0
+```
 
-# kgateway-proxy
+### kgateway-proxy
+
+```bash
 us-docker.pkg.dev/solo-public/enterprise-kgateway/envoy-wrapper:2.1.0
+```
 
-# redis
+### ext-cache (redis)
+
+```bash
 docker.io/redis:7.2.12-alpine
+```
 
-# ext-auth-service
+### ext-auth-service
+
+```bash
 gcr.io/gloo-mesh/ext-auth-service:0.71.4
+```
 
-# rate-limiter
+### rate-limiter
+
+```bash
 gcr.io/gloo-mesh/rate-limiter:0.17.2
+```
