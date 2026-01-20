@@ -1,6 +1,6 @@
 # Image list - Solo Enterprise for Kgateway
 
-**2.1.0:**
+**2.1.0**
 
 ## Helm Charts
 
