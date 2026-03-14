@@ -48,7 +48,7 @@ udproutes                         gateway.networking.k8s.io/v1alpha2  true      
 Export your Solo Trial license key variable and Enterprise Kgateway version
 ```bash
 export SOLO_TRIAL_LICENSE_KEY=$SOLO_TRIAL_LICENSE_KEY
-export GLOO_VERSION=2.1.0-beta.2
+export GLOO_VERSION=2.2.0-beta.9
 ```
 
 ### Enterprise Kgateway CRDs
@@ -153,7 +153,7 @@ spec:
       #image:
       #  registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
       #  repository: envoy-wrapper
-      #  tag: "2.1.0"
+      #  tag: ""
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
@@ -178,7 +178,7 @@ spec:
         #  image:
         #    registry: gcr.io
         #    repository: gloo-mesh/ext-auth-service
-        #    tag: "0.71.4"
+        #    tag: ""
       ratelimiter:
         enabled: true
         replicas: 1
@@ -187,7 +187,7 @@ spec:
         #  image:
         #    registry: gcr.io
         #    repository: gloo-mesh/rate-limiter
-        #    tag: "0.17.2"
+        #    tag: ""
       extCache:
         enabled: true
         replicas: 1
@@ -196,7 +196,7 @@ spec:
         #  image:
         #    registry: docker.io
         #    repository: redis
-        #    tag: "7.2.12-alpine"
+        #    tag: ""
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway

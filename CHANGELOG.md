@@ -10,6 +10,7 @@
 - Rename `007b-multi-tenant-mtls-current.md` → `008-multi-tenant-mtls.md`
 - Renumber labs 008–012 to 009–013 to accommodate new slot
 - Update README.md lab list to reflect new filenames
+- Update `000-image-list.md`
 
 0.0.5 - (1-16-26)
 ---

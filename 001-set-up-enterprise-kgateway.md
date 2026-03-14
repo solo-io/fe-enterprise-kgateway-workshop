@@ -146,7 +146,7 @@ spec:
     #  image:
     #    registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
     #    repository: envoy-wrapper
-    #    tag: "2.1.0"
+    #    tag: ""
     # --- uncomment to override service fields
     service:
       extraAnnotations:
@@ -166,7 +166,7 @@ spec:
         #  image:
         #    registry: gcr.io
         #    repository: gloo-mesh/ext-auth-service
-        #    tag: "0.71.4"
+        #    tag: ""
       ratelimiter:
         enabled: true
         replicas: 1
@@ -175,7 +175,7 @@ spec:
         #  image:
         #    registry: gcr.io
         #    repository: gloo-mesh/rate-limiter
-        #    tag: "0.17.2"
+        #    tag: ""
       extCache:
         enabled: true
         replicas: 1
@@ -184,7 +184,7 @@ spec:
         #  image:
         #    registry: docker.io
         #    repository: redis
-        #    tag: "7.2.12-alpine"
+        #    tag: ""
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway

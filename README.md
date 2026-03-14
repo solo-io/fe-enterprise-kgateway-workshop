@@ -61,7 +61,7 @@ This workshop demonstrates Solo Enterprise for Kgateway with hands-on labs cover
 
 ## Validated on
 - Kubernetes 1.29.4 - 1.33.3
-- Enterprise Kgateway 2.1.0
+- Enterprise Kgateway 2.2.0-beta.9
 
 
 ## User Stories / Acceptance Criteria
