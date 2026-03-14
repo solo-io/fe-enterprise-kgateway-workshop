@@ -18,7 +18,7 @@ In this workshop, you'll deploy Solo Enterprise for Kgateway with Envoy and comp
 Installing the Kubernetes Gateway API custom resources is a pre-requisite to using Enterprise Kgateway. We're using the experimental CRDs to enable advanced features like mTLS frontend validation (lab 007).
 
 ```bash
-kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/experimental-install.yaml
 ```
 
 To check if the the Kubernetes Gateway API CRDS are installed
@@ -55,7 +55,7 @@ Solo Trial License Key - Expires: X-XX-XX
 Export your Solo Trial license key variable and Enterprise Kgateway version
 ```bash
 export SOLO_TRIAL_LICENSE_KEY=$SOLO_TRIAL_LICENSE_KEY
-export GLOO_VERSION=2.1.0
+export GLOO_VERSION=2.2.0-beta.9
 ```
 
 ### Enterprise Kgateway CRDs
