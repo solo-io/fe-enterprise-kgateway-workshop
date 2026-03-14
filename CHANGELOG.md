@@ -1,5 +1,17 @@
 # Changelog
 
+0.0.6 - (3-13-26)
+---
+- Update `ENTERPRISE_KGATEWAY_VERSION` to `2.2.0-beta.9`
+- Update GWAPI version to 1.5.0 experimental
+- Rewrite `007b-multi-tenant-mtls-current.md` to demonstrate per-listener mTLS CA isolation using `ListenerPolicy` (`gateway.kgateway.dev/v1alpha1`)
+- Replace shared CA trust pool pattern with per-listener `clientCertificateValidation` targeting each listener by `sectionName`
+- Add Tenant C listener inheriting gateway-level default CA as a contrast case
+- Rename `007b-multi-tenant-mtls-current.md` → `008-multi-tenant-mtls.md`
+- Renumber labs 008–012 to 009–013 to accommodate new slot
+- Update README.md lab list to reflect new filenames
+- Update `000-image-list.md`
+
 0.0.5 - (1-16-26)
 ---
 - Minor updates

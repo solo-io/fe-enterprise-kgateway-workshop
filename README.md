@@ -10,12 +10,12 @@ This workshop demonstrates Solo Enterprise for Kgateway with hands-on labs cover
 - [005-JWT-validation.md](005-JWT-validation.md)
 - [006-observability.md](006-observability.md)
 - [007-mtls-termination.md](007-mtls-termination.md)
-- [007b-multi-tenant-mtls-current.md](007b-multi-tenant-mtls-current.md)
-- [008-buffering.md](008-buffering.md)
-- [009-timeouts-and-retries.md](009-timeouts-and-retries.md)
-- [010-global-policy-attachment.md](010-global-policy-attachment.md)
-- [011-backend-config-policy.md](011-backend-config-policy.md)
-- [012-rate-limiting.md](012-rate-limiting.md)
+- [008-multi-tenant-mtls.md](008-multi-tenant-mtls.md)
+- [009-buffering.md](009-buffering.md)
+- [010-timeouts-and-retries.md](010-timeouts-and-retries.md)
+- [011-global-policy-attachment.md](011-global-policy-attachment.md)
+- [012-backend-config-policy.md](012-backend-config-policy.md)
+- [013-rate-limiting.md](013-rate-limiting.md)
 
 # Use Cases
 - Support Kubernetes Gateway API
@@ -61,7 +61,7 @@ This workshop demonstrates Solo Enterprise for Kgateway with hands-on labs cover
 
 ## Validated on
 - Kubernetes 1.29.4 - 1.33.3
-- Enterprise Kgateway 2.1.0
+- Enterprise Kgateway 2.2.0-beta.9
 
 
 ## User Stories / Acceptance Criteria
