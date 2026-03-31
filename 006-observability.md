@@ -52,7 +52,7 @@ kgateway_controller_reconciliations_total{controller="gatewayclass-provisioner",
 ## Access Logs
 Access logs, sometimes referred to as audit logs, represent all traffic requests that pass through the gateway proxy. The access log entries can be customized to include data from the request, the routing destination, and the response.
 
-In lab `001` we configured a `HTTPListenerPolicy` to set up access logging for our gateway. Access logs are printed to stdout
+In lab `001` we configured a `ListenerPolicy` to set up access logging for our gateway. Access logs are printed to stdout
 
 ```bash
 kubectl logs -n enterprise-kgateway deploy/ingress
