@@ -26,15 +26,18 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: httpbin
   name: httpbin
   namespace: httpbin
+  labels:
+    app: httpbin
+    service: httpbin
 spec:
   ports:
-  - name: http
-    port: 8000
-    targetPort: 80
+    - name: http
+      port: 8000
+      targetPort: 8080
+    - name: tcp
+      port: 9000
   selector:
     app: httpbin
 ---
@@ -55,13 +58,31 @@ spec:
         app: httpbin
         version: v1
     spec:
-      containers:
-      - image: docker.io/kennethreitz/httpbin
-        imagePullPolicy: IfNotPresent
-        name: httpbin
-        ports:
-        - containerPort: 80
       serviceAccountName: httpbin
+      containers:
+        - image: docker.io/mccutchen/go-httpbin:v2.6.0
+          imagePullPolicy: IfNotPresent
+          name: httpbin
+          command: [ go-httpbin ]
+          args:
+            - "-port"
+            - "8080"
+            - "-max-duration"
+            - "600s" # override default 10s
+          ports:
+            - containerPort: 8080
+        - name: curl
+          image: curlimages/curl:7.83.1
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "200m"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "tail"
+            - "-f"
+            - "/dev/null"
 EOF
 ```
 
