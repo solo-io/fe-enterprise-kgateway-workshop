@@ -216,7 +216,7 @@ spec:
 apiVersion: gateway.kgateway.dev/v1alpha1
 kind: ListenerPolicy
 metadata:
-  name: access-logs
+  name: ingress-gateway-access-logging
   namespace: enterprise-kgateway
 spec:
   targetRefs:
