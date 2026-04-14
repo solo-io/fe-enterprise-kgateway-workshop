@@ -214,7 +214,7 @@ spec:
           from: All
 ---
 apiVersion: gateway.kgateway.dev/v1alpha1
-kind: HTTPListenerPolicy
+kind: ListenerPolicy
 metadata:
   name: ingress-gateway-access-logging
   namespace: enterprise-kgateway
@@ -223,26 +223,28 @@ spec:
   - group: gateway.networking.k8s.io
     kind: Gateway
     name: ingress
-  accessLog:
-  - fileSink:
-      path: /dev/stdout
-      jsonFormat:
-        start_time: "%START_TIME%"
-        method: "%REQ(X-ENVOY-ORIGINAL-METHOD?:METHOD)%"
-        path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
-        protocol: "%PROTOCOL%"
-        response_code: "%RESPONSE_CODE%"
-        response_flags: "%RESPONSE_FLAGS%"
-        bytes_received: "%BYTES_RECEIVED%"
-        bytes_sent: "%BYTES_SENT%"
-        total_duration: "%DURATION%"
-        resp_backend_service_time: "%RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)%"
-        req_x_forwarded_for: "%REQ(X-FORWARDED-FOR)%"
-        user_agent: "%REQ(USER-AGENT)%"
-        request_id: "%REQ(X-REQUEST-ID)%"
-        authority: "%REQ(:AUTHORITY)%"
-        backendHost: "%UPSTREAM_HOST%"
-        backendCluster: "%UPSTREAM_CLUSTER%"
+  default:
+    httpSettings:
+      accessLog:
+        - fileSink:
+            path: /dev/stdout
+            jsonFormat:
+              start_time: "%START_TIME%"
+              method: "%REQ(X-ENVOY-ORIGINAL-METHOD?:METHOD)%"
+              path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
+              protocol: "%PROTOCOL%"
+              response_code: "%RESPONSE_CODE%"
+              response_flags: "%RESPONSE_FLAGS%"
+              bytes_received: "%BYTES_RECEIVED%"
+              bytes_sent: "%BYTES_SENT%"
+              total_duration: "%DURATION%"
+              resp_backend_service_time: "%RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)%"
+              req_x_forwarded_for: "%REQ(X-FORWARDED-FOR)%"
+              user_agent: "%REQ(USER-AGENT)%"
+              request_id: "%REQ(X-REQUEST-ID)%"
+              authority: "%REQ(:AUTHORITY)%"
+              backendHost: "%UPSTREAM_HOST%"
+              backendCluster: "%UPSTREAM_CLUSTER%"
 EOF
 ```
 
