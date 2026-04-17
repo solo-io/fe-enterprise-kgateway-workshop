@@ -55,7 +55,7 @@ Solo Trial License Key - Expires: X-XX-XX
 Export your Solo Trial license key variable and Enterprise Kgateway version
 ```bash
 export SOLO_TRIAL_LICENSE_KEY=$SOLO_TRIAL_LICENSE_KEY
-export GLOO_VERSION=2.2.0-beta.9
+export GLOO_VERSION=2.2.0-beta.19
 ```
 
 ### Enterprise Kgateway CRDs

@@ -48,7 +48,7 @@ udproutes                         gateway.networking.k8s.io/v1alpha2  true      
 Export your Solo Trial license key variable and Enterprise Kgateway version
 ```bash
 export SOLO_TRIAL_LICENSE_KEY=$SOLO_TRIAL_LICENSE_KEY
-export GLOO_VERSION=2.2.0-beta.9
+export GLOO_VERSION=2.2.0-beta.19
 ```
 
 ### Enterprise Kgateway CRDs
