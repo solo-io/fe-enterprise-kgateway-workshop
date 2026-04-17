@@ -1,5 +1,9 @@
 # Changelog
 
+0.0.8 - (4-17-26)
+---
+- Updates to `014-waf.md`
+
 0.0.7 - (4-17-26)
 ---
 - Update `ENTERPRISE_KGATEWAY_VERSION` to `2.2.0-beta.19`
