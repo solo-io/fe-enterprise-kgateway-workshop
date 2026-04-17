@@ -1,5 +1,9 @@
 # Changelog
 
+0.0.9 - (4-17-26)
+---
+- Updates to `014-waf.md` - add sectionName example for increased granularity when applying WAF policies
+
 0.0.8 - (4-17-26)
 ---
 - Updates to `014-waf.md`
