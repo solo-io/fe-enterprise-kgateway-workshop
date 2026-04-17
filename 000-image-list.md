@@ -1,6 +1,6 @@
 # Image list - Solo Enterprise for Kgateway
 
-**2.2.0-beta.9**
+**2.2.0-beta.19**
 
 ## Helm Charts
 
@@ -21,13 +21,13 @@ oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgatew
 ### controller
 
 ```bash
-us-docker.pkg.dev/solo-public/enterprise-kgateway/enterprise-kgateway-controller:2.2.0-beta.9
+us-docker.pkg.dev/solo-public/enterprise-kgateway/enterprise-kgateway-controller:2.2.0-beta.19
 ```
 
 ### kgateway-proxy
 
 ```bash
-us-docker.pkg.dev/solo-public/enterprise-kgateway/envoy-wrapper:2.2.0-beta.9
+us-docker.pkg.dev/solo-public/enterprise-kgateway/envoy-wrapper:2.2.0-beta.19
 ```
 
 ### ext-cache (redis)
@@ -39,11 +39,17 @@ docker.io/redis:7.2.12-alpine
 ### ext-auth-service
 
 ```bash
-gcr.io/gloo-mesh/ext-auth-service:0.75.0
+gcr.io/gloo-mesh/ext-auth-service:0.79.0
 ```
 
 ### rate-limiter
 
 ```bash
 gcr.io/gloo-mesh/rate-limiter:0.17.2
+```
+
+### waf-server
+
+```bash
+us-docker.pkg.dev/solo-public/enterprise-kgateway/waf-server:2.2.0-beta.19
 ```

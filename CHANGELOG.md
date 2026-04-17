@@ -1,5 +1,12 @@
 # Changelog
 
+0.0.7 - (4-17-26)
+---
+- Update `ENTERPRISE_KGATEWAY_VERSION` to `2.2.0-beta.19`
+- Add `014-waf.md` - WAF lab covering Coraza IP allowlisting with `@ipMatch`, detection-only mode, and OWASP rule layering
+- Update `000-image-list.md` for `2.2.0-beta.19`
+- Update README.md lab list
+
 0.0.6 - (3-13-26)
 ---
 - Update `ENTERPRISE_KGATEWAY_VERSION` to `2.2.0-beta.9`

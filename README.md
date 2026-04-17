@@ -16,6 +16,7 @@ This workshop demonstrates Solo Enterprise for Kgateway with hands-on labs cover
 - [011-global-policy-attachment.md](011-global-policy-attachment.md)
 - [012-backend-config-policy.md](012-backend-config-policy.md)
 - [013-rate-limiting.md](013-rate-limiting.md)
+- [014-waf.md](014-waf.md)
 
 # Use Cases
 - Support Kubernetes Gateway API
@@ -61,7 +62,7 @@ This workshop demonstrates Solo Enterprise for Kgateway with hands-on labs cover
 
 ## Validated on
 - Kubernetes 1.29.4 - 1.33.3
-- Enterprise Kgateway 2.2.0-beta.9
+- Enterprise Kgateway 2.2.0-beta.19
 
 
 ## User Stories / Acceptance Criteria
