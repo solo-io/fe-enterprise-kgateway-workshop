@@ -4,7 +4,7 @@
 ---
 - Update variable GLOO_VERSION > KGW_VERSION
 - Update KGW_VERSION to `2.2.0`
-- Minor fix in `003-tls-termination.md`
+- Minor fixes in `003-tls-termination.md`
 
 0.0.9 - (4-17-26)
 ---
