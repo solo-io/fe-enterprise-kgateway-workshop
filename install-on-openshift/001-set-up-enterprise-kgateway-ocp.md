@@ -48,7 +48,7 @@ udproutes                         gateway.networking.k8s.io/v1alpha2  true      
 Export your Solo Trial license key variable and Enterprise Kgateway version
 ```bash
 export SOLO_TRIAL_LICENSE_KEY=$SOLO_TRIAL_LICENSE_KEY
-export GLOO_VERSION=2.2.0-beta.19
+export KGW_VERSION=2.2.0-beta.19
 ```
 
 ### Enterprise Kgateway CRDs
@@ -58,7 +58,7 @@ kubectl create namespace enterprise-kgateway
 
 ```bash
 helm upgrade -i --create-namespace --namespace enterprise-kgateway \
-    --version $GLOO_VERSION enterprise-kgateway-crds \
+    --version $KGW_VERSION enterprise-kgateway-crds \
     oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway-crds
 ```
 
@@ -90,14 +90,14 @@ Using Helm:
 ```bash
 helm upgrade -i -n enterprise-kgateway enterprise-kgateway oci://us-docker.pkg.dev/solo-public/enterprise-kgateway/charts/enterprise-kgateway \
 --create-namespace \
---version $GLOO_VERSION \
+--version $KGW_VERSION \
 --set-string licensing.licenseKey=$SOLO_TRIAL_LICENSE_KEY \
 -f -<<EOF
 #--- Optional: override for image registry/tag for the controller
 #image:
 #  registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
 #  repository: enterprise-kgateway-controller
-#  tag: "$GLOO_VERSION"
+#  tag: "$KGW_VERSION"
 #  pullPolicy: IfNotPresent
 # --- Override the default Kgateway parameters used by this GatewayClass
 # If the referenced parameters are not found, the controller will use the defaults

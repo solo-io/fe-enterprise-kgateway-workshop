@@ -1,5 +1,11 @@
 # Changelog
 
+0.1.0 - (5-27-26)
+---
+- Update variable GLOO_VERSION > KGW_VERSION
+- Update KGW_VERSION to `2.2.0`
+- Minor fixes in `003-tls-termination.md`
+
 0.0.9 - (4-17-26)
 ---
 - Updates to `014-waf.md` - add sectionName example for increased granularity when applying WAF policies
