@@ -30,16 +30,17 @@ kubectl api-resources --api-group=gateway.networking.k8s.io
 Expected Output (experimental CRDs include additional resources like TCPRoute, TLSRoute, UDPRoute):
 
 ```bash
-NAME                 SHORTNAMES   APIVERSION                          NAMESPACED   KIND
-backendtlspolicies   btlspolicy   gateway.networking.k8s.io/v1        true         BackendTLSPolicy
-gatewayclasses       gc           gateway.networking.k8s.io/v1        false        GatewayClass
-gateways             gtw          gateway.networking.k8s.io/v1        true         Gateway
-grpcroutes                        gateway.networking.k8s.io/v1        true         GRPCRoute
-httproutes                        gateway.networking.k8s.io/v1        true         HTTPRoute
-referencegrants      refgrant     gateway.networking.k8s.io/v1beta1   true         ReferenceGrant
-tcproutes                         gateway.networking.k8s.io/v1alpha2  true         TCPRoute
-tlsroutes                         gateway.networking.k8s.io/v1alpha2  true         TLSRoute
-udproutes                         gateway.networking.k8s.io/v1alpha2  true         UDPRoute
+NAME                 SHORTNAMES   APIVERSION                           NAMESPACED   KIND
+backendtlspolicies   btlspolicy   gateway.networking.k8s.io/v1         true         BackendTLSPolicy
+gatewayclasses       gc           gateway.networking.k8s.io/v1         false        GatewayClass
+gateways             gtw          gateway.networking.k8s.io/v1         true         Gateway
+grpcroutes                        gateway.networking.k8s.io/v1         true         GRPCRoute
+httproutes                        gateway.networking.k8s.io/v1         true         HTTPRoute
+listenersets         lset         gateway.networking.k8s.io/v1         true         ListenerSet
+referencegrants      refgrant     gateway.networking.k8s.io/v1         true         ReferenceGrant
+tcproutes                         gateway.networking.k8s.io/v1alpha2   true         TCPRoute
+tlsroutes                         gateway.networking.k8s.io/v1         true         TLSRoute
+udproutes                         gateway.networking.k8s.io/v1alpha2   true         UDPRoute
 ```
 
 ## Install Enterprise Kgateway
@@ -55,7 +56,7 @@ Solo Trial License Key - Expires: X-XX-XX
 Export your Solo Trial license key variable and Enterprise Kgateway version
 ```bash
 export SOLO_TRIAL_LICENSE_KEY=$SOLO_TRIAL_LICENSE_KEY
-export KGW_VERSION=2.2.0
+export KGW_VERSION=2.3.3
 ```
 
 ### Enterprise Kgateway CRDs
@@ -88,6 +89,7 @@ httplistenerpolicies.gateway.kgateway.dev
 listenerpolicies.gateway.kgateway.dev
 ratelimitconfigs.ratelimit.solo.io
 trafficpolicies.gateway.kgateway.dev
+wafpolicies.waf.solo.io
 ```
 
 ## Install Enterprise Kgateway Controller
@@ -131,6 +133,16 @@ enterprise-kgateway-64ff8f5c96-sjv7p   1/1     Running   0          3h17m
 ## Configure Envoy
 
 We configure Envoy by applying a `Gateway` resource with the new `enterprise-kgateway` GatewayClass. We are also going to apply the `ListenerPolicy` to enable access logging
+
+The `ingress-params` resource below is bound to the **GatewayClass** through the `gatewayClassParametersRefs` Helm value we set above, so every `Gateway` in the class picks it up automatically. Do not also reference it from a Gateway's `spec.infrastructure.parametersRef`: as of 2.3.x, an `EnterpriseKgatewayParameters` that defines `sharedExtensions` is only valid at the GatewayClass level, and a Gateway that points at it is rejected with `InvalidParameters`:
+
+```
+EnterpriseKgatewayParameters enterprise-kgateway/ingress-params is invalid because it
+defines SharedExtensions but is attached to a Gateway. SharedExtensions can only be
+configured on EnterpriseKgatewayParameters that are attached to a GatewayClass
+```
+
+If you hit that, check `kubectl get gateway -n enterprise-kgateway ingress -o yaml` — a rejected Gateway keeps serving its previous listeners, so the symptom is a listener change that silently never takes effect.
 ```bash
 kubectl apply -f- <<EOF
 ---
@@ -164,8 +176,8 @@ spec:
         #--- Image overrides for deployment ---
         #container:
         #  image:
-        #    registry: gcr.io
-        #    repository: gloo-mesh/ext-auth-service
+        #    registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
+        #    repository: ext-auth-service
         #    tag: ""
       ratelimiter:
         enabled: true
@@ -173,8 +185,8 @@ spec:
         #--- Image overrides for deployment ---
         #container:
         #  image:
-        #    registry: gcr.io
-        #    repository: gloo-mesh/rate-limiter
+        #    registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
+        #    repository: rate-limiter
         #    tag: ""
       extCache:
         enabled: true
@@ -245,10 +257,13 @@ kubectl get pods -n enterprise-kgateway
 Expected Output:
 
 ```bash
-NAME                                                     READY   STATUS    RESTARTS   AGE
-enterprise-kgateway-64775757bb-95p2k                     1/1     Running   0          6m19s
-ext-auth-service-enterprise-kgateway-77b54676fd-nc7bh    1/1     Running   0          2m52s
-gloo-ext-cache-enterprise-kgateway-6b7fd78658-t5w6v      1/1     Running   0          2m53s
-ingress-5b4b77984d-dj9c4                                 1/1     Running   0          2m53s
-rate-limiter-enterprise-kgateway-747f464cbd-jm5g7        1/1     Running   0          2m52s
+NAME                                                   READY   STATUS    RESTARTS   AGE
+enterprise-kgateway-6db55d79c8-gfj2t                   1/1     Running   0          6m19s
+ext-auth-service-enterprise-kgateway-c9b6d7fbc-hrfjx   1/1     Running   0          2m52s
+ext-cache-enterprise-kgateway-65bd477dfd-zdlhd         1/1     Running   0          2m53s
+ingress-744f8444-klm2j                                 1/1     Running   0          2m53s
+rate-limiter-enterprise-kgateway-5c9f6bfcbc-j2l96      1/1     Running   0          2m52s
+waf-server-enterprise-kgateway-5754bb6695-qrrm9        1/1     Running   0          2m52s
 ```
+
+The `waf-server` pod is deployed alongside the other shared extensions and backs the `WAFPolicy` resources used in lab `014`.

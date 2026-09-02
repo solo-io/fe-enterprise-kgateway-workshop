@@ -170,9 +170,17 @@ curl -i "$GATEWAY_IP/get" \
 
 The connection is now idle. After 30 seconds of no activity, the gateway will close this connection to the backend. Subsequent requests will create a new connection.
 
-To observe this behavior, you can check Envoy stats:
+To observe this behavior, check the Envoy stats. The `envoy-wrapper` image is
+distroless — it has no shell and no `curl` — so reach the admin endpoint through
+a port-forward rather than `kubectl exec`:
+
 ```bash
-kubectl exec -n enterprise-kgateway deploy/ingress -- curl -s localhost:19000/stats | grep upstream_cx_destroy_local
+kubectl -n enterprise-kgateway port-forward deployment/ingress 19000
+```
+
+In another terminal:
+```bash
+curl -s localhost:19000/stats | grep upstream_cx_destroy_local
 ```
 
 This shows connections closed locally by the gateway due to idle timeout.

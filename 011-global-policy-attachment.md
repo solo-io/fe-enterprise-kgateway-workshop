@@ -144,10 +144,36 @@ EOF
 
 Verify both routes now have the timeout policy applied:
 ```bash
-kubectl get enterprisekgatewaytrafficpolicy -n httpbin global-timeout-policy -o yaml | grep -A 10 status:
+kubectl get enterprisekgatewaytrafficpolicy -n httpbin global-timeout-policy -o yaml | grep -A 20 "status:"
 ```
 
-You should see the policy attached to both HTTPRoutes in the status.
+A `targetSelectors` policy reports a single ancestor — the `Gateway` serving the
+selected routes — with an `Attached` condition of `Attached to all targets`. It
+does **not** list one ancestor per matched HTTPRoute, so don't look for
+`httpbin-route` here:
+
+```yaml
+status:
+  ancestors:
+  - ancestorRef:
+      group: gateway.networking.k8s.io
+      kind: Gateway
+      name: ingress
+      namespace: enterprise-kgateway
+    conditions:
+    - message: Policy accepted
+      reason: Valid
+      status: "True"
+      type: Accepted
+    - message: Attached to all targets
+      reason: Attached
+      status: "True"
+      type: Attached
+    controllerName: solo.io/enterprise-kgateway
+```
+
+To confirm which routes actually picked the policy up, send traffic through each
+one and check the `X-Envoy-Expected-Rq-Timeout-Ms` header, as below.
 
 Test the second route:
 ```bash

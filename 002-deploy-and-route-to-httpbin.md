@@ -123,6 +123,15 @@ spec:
 EOF
 ```
 
+## Test the suite
+
+The repo ships an end-to-end suite that replays every lab against a live cluster.
+After finishing this lab you can check your setup with:
+
+```bash
+./run-e2e.sh -k lab-002
+```
+
 ## curl httpbin
 ```bash
 export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.networking.k8s.io/gateway-name=ingress -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}{.items[*].status.loadBalancer.ingress[0].hostname}')
@@ -146,12 +155,33 @@ x-envoy-upstream-service-time: 10
 {
   "args": {},
   "headers": {
-    "Accept": "*/*",
-    "Content-Type": "application/json",
-    "Host": "httpbin.glootest.com",
-    "User-Agent": "curl/8.7.1",
-    "X-Envoy-Expected-Rq-Timeout-Ms": "15000",
-    "X-Envoy-External-Address": "10.42.0.1"
+    "Accept": [
+      "*/*"
+    ],
+    "Content-Type": [
+      "application/json"
+    ],
+    "Host": [
+      "httpbin.glootest.com"
+    ],
+    "User-Agent": [
+      "curl/8.7.1"
+    ],
+    "X-Envoy-Expected-Rq-Timeout-Ms": [
+      "15000"
+    ],
+    "X-Envoy-External-Address": [
+      "10.42.0.1"
+    ],
+    "X-Forwarded-For": [
+      "10.42.0.1"
+    ],
+    "X-Forwarded-Proto": [
+      "http"
+    ],
+    "X-Request-Id": [
+      "d9c5ef55-4625-4ed3-9e48-d3f43e5cd86c"
+    ]
   },
   "origin": "10.42.0.1",
   "url": "http://httpbin.glootest.com/get"

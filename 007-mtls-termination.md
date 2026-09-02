@@ -57,11 +57,6 @@ metadata:
   namespace: enterprise-kgateway
 spec:
   gatewayClassName: enterprise-kgateway
-  infrastructure:
-    parametersRef:
-      group: enterprisekgateway.solo.io
-      kind: EnterpriseKgatewayParameters
-      name: ingress-params
   tls:
     frontend:
       default:
@@ -174,11 +169,6 @@ metadata:
   namespace: enterprise-kgateway
 spec:
   gatewayClassName: enterprise-kgateway
-  infrastructure:
-    parametersRef:
-      group: enterprisekgateway.solo.io
-      kind: EnterpriseKgatewayParameters
-      name: ingress-params
   listeners:
     - name: http
       port: 80
