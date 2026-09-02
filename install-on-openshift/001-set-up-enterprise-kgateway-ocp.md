@@ -30,16 +30,17 @@ kubectl api-resources --api-group=gateway.networking.k8s.io
 Expected Output (experimental CRDs include additional resources like TCPRoute, TLSRoute, UDPRoute):
 
 ```bash
-NAME                 SHORTNAMES   APIVERSION                          NAMESPACED   KIND
-backendtlspolicies   btlspolicy   gateway.networking.k8s.io/v1        true         BackendTLSPolicy
-gatewayclasses       gc           gateway.networking.k8s.io/v1        false        GatewayClass
-gateways             gtw          gateway.networking.k8s.io/v1        true         Gateway
-grpcroutes                        gateway.networking.k8s.io/v1        true         GRPCRoute
-httproutes                        gateway.networking.k8s.io/v1        true         HTTPRoute
-referencegrants      refgrant     gateway.networking.k8s.io/v1beta1   true         ReferenceGrant
-tcproutes                         gateway.networking.k8s.io/v1alpha2  true         TCPRoute
-tlsroutes                         gateway.networking.k8s.io/v1alpha2  true         TLSRoute
-udproutes                         gateway.networking.k8s.io/v1alpha2  true         UDPRoute
+NAME                 SHORTNAMES   APIVERSION                           NAMESPACED   KIND
+backendtlspolicies   btlspolicy   gateway.networking.k8s.io/v1         true         BackendTLSPolicy
+gatewayclasses       gc           gateway.networking.k8s.io/v1         false        GatewayClass
+gateways             gtw          gateway.networking.k8s.io/v1         true         Gateway
+grpcroutes                        gateway.networking.k8s.io/v1         true         GRPCRoute
+httproutes                        gateway.networking.k8s.io/v1         true         HTTPRoute
+listenersets         lset         gateway.networking.k8s.io/v1         true         ListenerSet
+referencegrants      refgrant     gateway.networking.k8s.io/v1         true         ReferenceGrant
+tcproutes                         gateway.networking.k8s.io/v1alpha2   true         TCPRoute
+tlsroutes                         gateway.networking.k8s.io/v1         true         TLSRoute
+udproutes                         gateway.networking.k8s.io/v1alpha2   true         UDPRoute
 ```
 
 ## Install Enterprise Kgateway
@@ -48,7 +49,7 @@ udproutes                         gateway.networking.k8s.io/v1alpha2  true      
 Export your Solo Trial license key variable and Enterprise Kgateway version
 ```bash
 export SOLO_TRIAL_LICENSE_KEY=$SOLO_TRIAL_LICENSE_KEY
-export KGW_VERSION=2.2.0-beta.19
+export KGW_VERSION=2.3.3
 ```
 
 ### Enterprise Kgateway CRDs
@@ -83,6 +84,7 @@ httplistenerpolicies.gateway.kgateway.dev
 listenerpolicies.gateway.kgateway.dev
 ratelimitconfigs.ratelimit.solo.io
 trafficpolicies.gateway.kgateway.dev
+wafpolicies.waf.solo.io
 ```
 
 ## Install Enterprise Kgateway Controller
@@ -176,8 +178,8 @@ spec:
         #--- Image overrides for deployment ---
         #container:
         #  image:
-        #    registry: gcr.io
-        #    repository: gloo-mesh/ext-auth-service
+        #    registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
+        #    repository: ext-auth-service
         #    tag: ""
       ratelimiter:
         enabled: true
@@ -185,8 +187,8 @@ spec:
         #--- Image overrides for deployment ---
         #container:
         #  image:
-        #    registry: gcr.io
-        #    repository: gloo-mesh/rate-limiter
+        #    registry: us-docker.pkg.dev/solo-public/enterprise-kgateway
+        #    repository: rate-limiter
         #    tag: ""
       extCache:
         enabled: true

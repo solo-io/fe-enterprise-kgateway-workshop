@@ -60,9 +60,26 @@ This workshop demonstrates Solo Enterprise for Kgateway with hands-on labs cover
     - Policy-based governance
 
 
+## End-to-end tests
+
+Every lab in this repo has a matching test that replays it against a live
+cluster. Run the whole thing with:
+
+```bash
+export SOLO_TRIAL_LICENSE_KEY=<your key>
+./run-e2e.sh --install     # install Enterprise kgateway, then run every lab
+./run-e2e.sh               # re-run against an already-installed cluster
+./run-e2e.sh --list        # see what is covered
+./run-e2e.sh -k waf        # run one lab
+```
+
+A failing test means the lab text no longer matches what the product does. See
+[tests/README.md](tests/README.md) for the helpers and how to add a lab.
+
 ## Validated on
-- Kubernetes 1.29.4 - 1.33.3
-- Enterprise Kgateway 2.2.0-beta.19
+- Kubernetes 1.29.4 - 1.33.5
+- Enterprise Kgateway 2.3.3
+- Kubernetes Gateway API 1.5.0 (experimental channel)
 
 
 ## User Stories / Acceptance Criteria

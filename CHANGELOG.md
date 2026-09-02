@@ -1,5 +1,16 @@
 # Changelog
 
+0.1.1 - (9-2-26)
+---
+- Update `KGW_VERSION` to `2.3.3`
+- Add an e2e suite: `run-e2e.sh` 
+- Remove `spec.infrastructure.parametersRef` from the Gateways in `004-SNI-matching.md` and `007-mtls-termination.md`
+- Fixes in `011-global-policy-attachment.md`
+- Update `000-image-list.md` for `2.3.3`
+- Update expected output in `001` for GWAPI 1.5.0
+- Update expected output in `002-deploy-and-route-to-httpbin.md` to match go-httpbin v2.6.0
+- README: add e2e instructions, bump validated versions
+
 0.1.0 - (5-27-26)
 ---
 - Update variable GLOO_VERSION > KGW_VERSION
