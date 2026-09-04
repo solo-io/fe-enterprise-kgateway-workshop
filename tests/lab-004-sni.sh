@@ -9,12 +9,12 @@ cleanup() {
 }
 trap cleanup EXIT
 
-FOO=httpbin-foo.glootest.com
-BAR=httpbin-bar.glootest.com
-BAZ=httpbin-baz.glootest.com
+FOO=httpbin-foo.try-solo.io
+BAR=httpbin-bar.try-solo.io
+BAZ=httpbin-baz.try-solo.io
 
 step "Generate a root CA and two hostname-specific server certs"
-make_ca glootest '/O=Solo.io/CN=glootest.com'
+make_ca glootest '/O=Solo.io/CN=try-solo.io'
 make_leaf foo "/CN=${FOO}/O=httpbin organization" glootest 0
 make_leaf bar "/CN=${BAR}/O=solo.io"              glootest 1
 assert_contains "the foo certificate is issued for ${FOO}" "CN=${FOO}" "$(cert_subject "$CERTS/foo.crt")"
@@ -64,7 +64,7 @@ wait_for 90 "both listeners to be Programmed" bash -c \
 wait_for_service_port 120 443
 
 for h in foo bar baz; do
-  hostname_var="httpbin-${h}.glootest.com"
+  hostname_var="httpbin-${h}.try-solo.io"
   kubectl apply -f - >/dev/null <<YAML
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

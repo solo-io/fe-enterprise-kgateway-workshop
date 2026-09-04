@@ -10,7 +10,7 @@ set -uo pipefail
 
 GW_NS=enterprise-kgateway
 APP_NS=httpbin
-HOST=httpbin.glootest.com
+HOST=httpbin.try-solo.io
 
 # --- output ------------------------------------------------------------------
 

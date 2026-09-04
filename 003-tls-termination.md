@@ -19,7 +19,7 @@ mkdir example_certs
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj '/O=any domain/CN=*' -keyout example_certs/root.key -out example_certs/root.crt
 ```
 
-Create an OpenSSL configuration that matches the HTTPS hostname you plan to use. Replace every glootest.com reference with the base domain that your listener serves.
+Create an OpenSSL configuration that matches the HTTPS hostname you plan to use. Replace every try-solo.io reference with the base domain that your listener serves.
 ```bash
 cat <<'EOF' > example_certs/gateway.cnf
 [ req ]
@@ -30,15 +30,15 @@ distinguished_name = dn
 req_extensions = req_ext
 
 [ dn ]
-CN = *.glootest.com
+CN = *.try-solo.io
 O = any domain
 
 [ req_ext ]
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = *.glootest.com
-DNS.2 = glootest.com
+DNS.1 = *.try-solo.io
+DNS.2 = try-solo.io
 EOF
 ```
 
@@ -94,7 +94,7 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 curl -i "$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 This should fail because we no longer have a listener on port 80
@@ -106,7 +106,7 @@ curl httpbin over https, this should succeed
 ```bash
 curl -ik "https://$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 ## Cleanup
@@ -145,7 +145,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin.glootest.com"
+  - "httpbin.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway

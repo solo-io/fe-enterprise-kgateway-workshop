@@ -61,7 +61,7 @@ kubectl logs -n enterprise-kgateway deploy/ingress
 Example access log
 ```json
 {
-  "authority": "httpbin.glootest.com",
+  "authority": "httpbin.try-solo.io",
   "backendCluster": "kube_httpbin_httpbin_8000",
   "backendHost": "10.42.0.12:80",
   "bytes_received": 0,

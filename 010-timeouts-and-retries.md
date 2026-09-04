@@ -60,7 +60,7 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 time curl -i "$GATEWAY_IP/delay/1" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (should succeed with HTTP 200 after ~1 second):
@@ -83,7 +83,7 @@ x-envoy-upstream-service-time: 1004
     ...
   },
   "origin": "...",
-  "url": "http://httpbin.glootest.com/delay/1"
+  "url": "http://httpbin.try-solo.io/delay/1"
 }
 ```
 
@@ -94,7 +94,7 @@ Send a request with a 5 second delay. This should fail with a timeout since it e
 ```bash
 time curl -i "$GATEWAY_IP/delay/5" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (should timeout after 3 seconds with HTTP 504):
@@ -164,7 +164,7 @@ Send a request with a 3 second delay. Each attempt will timeout after 2 seconds,
 ```bash
 time curl -i "$GATEWAY_IP/delay/3" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (should timeout after ~5 seconds total, having attempted 2-3 retries):
@@ -187,7 +187,7 @@ Send a request with a 1 second delay. This should succeed on the first try witho
 ```bash
 time curl -i "$GATEWAY_IP/delay/1" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (should succeed after ~1 second):
@@ -232,7 +232,7 @@ Test the retry behavior by requesting a 503 status:
 
 ```bash
 curl -i "$GATEWAY_IP/status/503" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 The gateway will retry the request 3 times before returning the 503 error.

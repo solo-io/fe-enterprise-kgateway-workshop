@@ -61,7 +61,7 @@ First, test with a small number of additional headers (should succeed):
 export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.networking.k8s.io/gateway-name=ingress -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}{.items[*].status.loadBalancer.ingress[0].hostname}')
 
 curl -i "$GATEWAY_IP/response-headers?Custom-Header-1=value1&Custom-Header-2=value2" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (should succeed with HTTP 200 - total ~9 headers):
@@ -82,7 +82,7 @@ x-envoy-upstream-service-time: 5
 Now, test with many additional headers to exceed the 10 header limit:
 ```bash
 curl -i "$GATEWAY_IP/response-headers?H1=v1&H2=v2&H3=v3&H4=v4&H5=v5&H6=v6&H7=v7&H8=v8" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (should fail with HTTP 502 - total would be 15+ headers):
@@ -165,7 +165,7 @@ Make a request to establish a connection:
 export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.networking.k8s.io/gateway-name=ingress -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}{.items[*].status.loadBalancer.ingress[0].hostname}')
 
 curl -i "$GATEWAY_IP/get" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 The connection is now idle. After 30 seconds of no activity, the gateway will close this connection to the backend. Subsequent requests will create a new connection.

@@ -14,19 +14,19 @@ distinguished_name = dn
 req_extensions = req_ext
 
 [ dn ]
-CN = *.glootest.com
+CN = *.try-solo.io
 O = any domain
 
 [ req_ext ]
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = *.glootest.com
-DNS.2 = glootest.com
+DNS.1 = *.try-solo.io
+DNS.2 = try-solo.io
 CNF
 make_leaf gateway '' root 0 "$CERTS/gateway.cnf"
 assert_ok "openssl produced a gateway certificate" test -s "$CERTS/gateway.crt"
-assert_contains "the certificate carries the *.glootest.com SAN" "DNS:*.glootest.com" \
+assert_contains "the certificate carries the *.try-solo.io SAN" "DNS:*.try-solo.io" \
   "$(openssl x509 -in "$CERTS/gateway.crt" -noout -text 2>/dev/null)"
 
 kubectl delete secret -n "$GW_NS" https --ignore-not-found >/dev/null 2>&1
@@ -69,5 +69,5 @@ assert_eq "plain HTTP on port 80 no longer connects" 000 "$(http_code /get)"
 step "The gateway presents the certificate we supplied"
 echo | openssl s_client -connect "${GATEWAY_IP}:443" -servername "$HOST" 2>/dev/null \
   | openssl x509 -out "$CERTS/served.crt" 2>/dev/null
-assert_contains "the served leaf certificate is the *.glootest.com cert" 'CN=*.glootest.com' \
+assert_contains "the served leaf certificate is the *.try-solo.io cert" 'CN=*.try-solo.io' \
   "$(cert_subject "$CERTS/served.crt")"

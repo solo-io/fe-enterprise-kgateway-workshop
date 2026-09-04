@@ -19,15 +19,15 @@ This lab assumes that you have completed the setup in `001` and `002`.
 
 ```
 Tenant A client cert (signed by Tenant A CA)
-  → port 443 / tenant-a.glootest.com → ListenerPolicy: CA = tenant-a-ca-cert → HTTP 200 ✅
-  → port 443 / tenant-b.glootest.com → ListenerPolicy: CA = tenant-b-ca-cert → rejected ✅
+  → port 443 / tenant-a.try-solo.io → ListenerPolicy: CA = tenant-a-ca-cert → HTTP 200 ✅
+  → port 443 / tenant-b.try-solo.io → ListenerPolicy: CA = tenant-b-ca-cert → rejected ✅
 
 Tenant B client cert (signed by Tenant B CA)
-  → port 443 / tenant-b.glootest.com → ListenerPolicy: CA = tenant-b-ca-cert → HTTP 200 ✅
-  → port 443 / tenant-a.glootest.com → ListenerPolicy: CA = tenant-a-ca-cert → rejected ✅
+  → port 443 / tenant-b.try-solo.io → ListenerPolicy: CA = tenant-b-ca-cert → HTTP 200 ✅
+  → port 443 / tenant-a.try-solo.io → ListenerPolicy: CA = tenant-a-ca-cert → rejected ✅
 
 Tenant C client cert (signed by Gateway CA)
-  → port 443 / tenant-c.glootest.com → no ListenerPolicy → inherits gateway default CA → HTTP 200 ✅
+  → port 443 / tenant-c.try-solo.io → no ListenerPolicy → inherits gateway default CA → HTTP 200 ✅
 ```
 
 All three listeners share port 443. The gateway selects the listener by SNI hostname, then the `ListenerPolicy` (if present) enforces the per-listener CA trust store.
@@ -44,9 +44,9 @@ Create a working directory and generate all certificates from scratch. This make
 mkdir example_certs
 
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 \
-  -subj '/O=Solo.io/CN=glootest.com' \
-  -keyout example_certs/glootest.com.key \
-  -out example_certs/glootest.com.crt
+  -subj '/O=Solo.io/CN=try-solo.io' \
+  -keyout example_certs/try-solo.io.key \
+  -out example_certs/try-solo.io.crt
 ```
 
 ### Tenant A CA
@@ -82,18 +82,18 @@ openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 \
   -out example_certs/gateway-ca.crt
 ```
 
-### Server certificates (one per listener, signed by glootest.com root)
+### Server certificates (one per listener, signed by try-solo.io root)
 
 ```bash
 # Tenant A server cert
 openssl req -out example_certs/tenant-a-server.csr \
   -newkey rsa:2048 -nodes \
   -keyout example_certs/tenant-a-server.key \
-  -subj "/CN=tenant-a.glootest.com/O=Solo.io"
+  -subj "/CN=tenant-a.try-solo.io/O=Solo.io"
 
 openssl x509 -req -sha256 -days 365 \
-  -CA example_certs/glootest.com.crt \
-  -CAkey example_certs/glootest.com.key \
+  -CA example_certs/try-solo.io.crt \
+  -CAkey example_certs/try-solo.io.key \
   -set_serial 100 \
   -in example_certs/tenant-a-server.csr \
   -out example_certs/tenant-a-server.crt
@@ -102,11 +102,11 @@ openssl x509 -req -sha256 -days 365 \
 openssl req -out example_certs/tenant-b-server.csr \
   -newkey rsa:2048 -nodes \
   -keyout example_certs/tenant-b-server.key \
-  -subj "/CN=tenant-b.glootest.com/O=Solo.io"
+  -subj "/CN=tenant-b.try-solo.io/O=Solo.io"
 
 openssl x509 -req -sha256 -days 365 \
-  -CA example_certs/glootest.com.crt \
-  -CAkey example_certs/glootest.com.key \
+  -CA example_certs/try-solo.io.crt \
+  -CAkey example_certs/try-solo.io.key \
   -set_serial 101 \
   -in example_certs/tenant-b-server.csr \
   -out example_certs/tenant-b-server.crt
@@ -115,11 +115,11 @@ openssl x509 -req -sha256 -days 365 \
 openssl req -out example_certs/tenant-c-server.csr \
   -newkey rsa:2048 -nodes \
   -keyout example_certs/tenant-c-server.key \
-  -subj "/CN=tenant-c.glootest.com/O=Solo.io"
+  -subj "/CN=tenant-c.try-solo.io/O=Solo.io"
 
 openssl x509 -req -sha256 -days 365 \
-  -CA example_certs/glootest.com.crt \
-  -CAkey example_certs/glootest.com.key \
+  -CA example_certs/try-solo.io.crt \
+  -CAkey example_certs/try-solo.io.key \
   -set_serial 102 \
   -in example_certs/tenant-c-server.csr \
   -out example_certs/tenant-c-server.crt
@@ -167,15 +167,15 @@ openssl x509 -req -sha256 -days 365 \
   -in example_certs/client-tenant-c.csr \
   -out example_certs/client-tenant-c.crt
 
-# Invalid client cert (signed by glootest.com root — not a tenant CA)
+# Invalid client cert (signed by try-solo.io root — not a tenant CA)
 openssl req -out example_certs/client-invalid.csr \
   -newkey rsa:2048 -nodes \
   -keyout example_certs/client-invalid.key \
   -subj "/CN=client.invalid.com/O=Invalid"
 
 openssl x509 -req -sha256 -days 365 \
-  -CA example_certs/glootest.com.crt \
-  -CAkey example_certs/glootest.com.key \
+  -CA example_certs/try-solo.io.crt \
+  -CAkey example_certs/try-solo.io.key \
   -set_serial 999 \
   -in example_certs/client-invalid.csr \
   -out example_certs/client-invalid.crt
@@ -252,7 +252,7 @@ spec:
   - name: tenant-a-https
     protocol: HTTPS
     port: 443
-    hostname: tenant-a.glootest.com
+    hostname: tenant-a.try-solo.io
     tls:
       mode: Terminate
       certificateRefs:
@@ -264,7 +264,7 @@ spec:
   - name: tenant-b-https
     protocol: HTTPS
     port: 443
-    hostname: tenant-b.glootest.com
+    hostname: tenant-b.try-solo.io
     tls:
       mode: Terminate
       certificateRefs:
@@ -276,7 +276,7 @@ spec:
   - name: tenant-c-https
     protocol: HTTPS
     port: 443
-    hostname: tenant-c.glootest.com
+    hostname: tenant-c.try-solo.io
     tls:
       mode: Terminate
       certificateRefs:
@@ -359,7 +359,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - tenant-a.glootest.com
+  - tenant-a.try-solo.io
   parentRefs:
   - name: ingress
     namespace: enterprise-kgateway
@@ -380,7 +380,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - tenant-b.glootest.com
+  - tenant-b.try-solo.io
   parentRefs:
   - name: ingress
     namespace: enterprise-kgateway
@@ -401,7 +401,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - tenant-c.glootest.com
+  - tenant-c.try-solo.io
   parentRefs:
   - name: ingress
     namespace: enterprise-kgateway
@@ -435,21 +435,21 @@ echo "Gateway IP: $GATEWAY_IP"
 
 | # | Client Cert | Hostname (all port 443) | Expected |
 |---|-------------|------------------------|----------|
-| 1 | tenant-a | tenant-a.glootest.com | HTTP 200 ✅ |
-| 2 | tenant-b | tenant-b.glootest.com | HTTP 200 ✅ |
-| 3 | tenant-c | tenant-c.glootest.com | HTTP 200 ✅ |
-| 4 | tenant-a | tenant-b.glootest.com | Connection dropped ✅ |
-| 5 | tenant-b | tenant-a.glootest.com | Connection dropped ✅ |
-| 6 | invalid  | tenant-a.glootest.com | Connection dropped ✅ |
-| 7 | none     | tenant-a.glootest.com | Connection dropped ✅ |
+| 1 | tenant-a | tenant-a.try-solo.io | HTTP 200 ✅ |
+| 2 | tenant-b | tenant-b.try-solo.io | HTTP 200 ✅ |
+| 3 | tenant-c | tenant-c.try-solo.io | HTTP 200 ✅ |
+| 4 | tenant-a | tenant-b.try-solo.io | Connection dropped ✅ |
+| 5 | tenant-b | tenant-a.try-solo.io | Connection dropped ✅ |
+| 6 | invalid  | tenant-a.try-solo.io | Connection dropped ✅ |
+| 7 | none     | tenant-a.try-solo.io | Connection dropped ✅ |
 
 ---
 
 ### Test 1: Tenant A — own listener (expect 200)
 
 ```bash
-curl -ik --resolve "tenant-a.glootest.com:443:$GATEWAY_IP" \
-  "https://tenant-a.glootest.com:443/get" \
+curl -ik --resolve "tenant-a.try-solo.io:443:$GATEWAY_IP" \
+  "https://tenant-a.try-solo.io:443/get" \
   --cert example_certs/client-tenant-a.crt \
   --key example_certs/client-tenant-a.key \
   --cacert example_certs/tenant-a-server.crt
@@ -460,8 +460,8 @@ Expected: **HTTP 200** ✅
 ### Test 2: Tenant B — own listener (expect 200)
 
 ```bash
-curl -ik --resolve "tenant-b.glootest.com:443:$GATEWAY_IP" \
-  "https://tenant-b.glootest.com:443/get" \
+curl -ik --resolve "tenant-b.try-solo.io:443:$GATEWAY_IP" \
+  "https://tenant-b.try-solo.io:443/get" \
   --cert example_certs/client-tenant-b.crt \
   --key example_certs/client-tenant-b.key \
   --cacert example_certs/tenant-b-server.crt
@@ -472,8 +472,8 @@ Expected: **HTTP 200** ✅
 ### Test 3: Tenant C — inherits gateway default CA (expect 200)
 
 ```bash
-curl -ik --resolve "tenant-c.glootest.com:443:$GATEWAY_IP" \
-  "https://tenant-c.glootest.com:443/get" \
+curl -ik --resolve "tenant-c.try-solo.io:443:$GATEWAY_IP" \
+  "https://tenant-c.try-solo.io:443/get" \
   --cert example_certs/client-tenant-c.crt \
   --key example_certs/client-tenant-c.key \
   --cacert example_certs/tenant-c-server.crt
@@ -486,8 +486,8 @@ Expected: **HTTP 200** ✅
 Tenant A's CA is not trusted by the `tenant-b-https` listener.
 
 ```bash
-curl -ikv --resolve "tenant-b.glootest.com:443:$GATEWAY_IP" \
-  "https://tenant-b.glootest.com:443/get" \
+curl -ikv --resolve "tenant-b.try-solo.io:443:$GATEWAY_IP" \
+  "https://tenant-b.try-solo.io:443/get" \
   --cert example_certs/client-tenant-a.crt \
   --key example_certs/client-tenant-a.key \
   --cacert example_certs/tenant-b-server.crt
@@ -500,8 +500,8 @@ Expected: **connection dropped** ✅
 Tenant B's CA is not trusted by the `tenant-a-https` listener.
 
 ```bash
-curl -ikv --resolve "tenant-a.glootest.com:443:$GATEWAY_IP" \
-  "https://tenant-a.glootest.com:443/get" \
+curl -ikv --resolve "tenant-a.try-solo.io:443:$GATEWAY_IP" \
+  "https://tenant-a.try-solo.io:443/get" \
   --cert example_certs/client-tenant-b.crt \
   --key example_certs/client-tenant-b.key \
   --cacert example_certs/tenant-a-server.crt
@@ -511,11 +511,11 @@ Expected: **connection dropped** ✅
 
 ### Test 6: Invalid certificate (expect rejection)
 
-The invalid cert is signed by the glootest.com root, which is not a trusted CA on any listener.
+The invalid cert is signed by the try-solo.io root, which is not a trusted CA on any listener.
 
 ```bash
-curl -ikv --resolve "tenant-a.glootest.com:443:$GATEWAY_IP" \
-  "https://tenant-a.glootest.com:443/get" \
+curl -ikv --resolve "tenant-a.try-solo.io:443:$GATEWAY_IP" \
+  "https://tenant-a.try-solo.io:443/get" \
   --cert example_certs/client-invalid.crt \
   --key example_certs/client-invalid.key \
   --cacert example_certs/tenant-a-server.crt
@@ -526,8 +526,8 @@ Expected: **connection dropped** ✅
 ### Test 7: No client certificate (expect rejection)
 
 ```bash
-curl -ikv --resolve "tenant-a.glootest.com:443:$GATEWAY_IP" \
-  "https://tenant-a.glootest.com:443/get" \
+curl -ikv --resolve "tenant-a.try-solo.io:443:$GATEWAY_IP" \
+  "https://tenant-a.try-solo.io:443/get" \
   --cacert example_certs/tenant-a-server.crt
 ```
 
@@ -537,11 +537,11 @@ Expected: **connection dropped** ✅
 
 ## Verification Checklist
 
-- ✅ Tenant A client can access `tenant-a.glootest.com:443`
-- ✅ Tenant B client can access `tenant-b.glootest.com:443`
-- ✅ Tenant C client can access `tenant-c.glootest.com:443` (gateway default CA)
-- ✅ Tenant A client cannot access `tenant-b.glootest.com:443`
-- ✅ Tenant B client cannot access `tenant-a.glootest.com:443`
+- ✅ Tenant A client can access `tenant-a.try-solo.io:443`
+- ✅ Tenant B client can access `tenant-b.try-solo.io:443`
+- ✅ Tenant C client can access `tenant-c.try-solo.io:443` (gateway default CA)
+- ✅ Tenant A client cannot access `tenant-b.try-solo.io:443`
+- ✅ Tenant B client cannot access `tenant-a.try-solo.io:443`
 - ✅ Invalid client certs are rejected on all listeners
 - ✅ Requests without a client cert are rejected on all listeners
 
@@ -586,7 +586,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin.glootest.com"
+  - "httpbin.try-solo.io"
   parentRefs:
   - name: ingress
     namespace: enterprise-kgateway

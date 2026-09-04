@@ -10,9 +10,9 @@ cleanup() {
 trap cleanup EXIT
 
 step "PKI: one root CA signing both the gateway and the client certificate"
-make_ca glootest '/O=Solo.io/CN=glootest.com'
+make_ca glootest '/O=Solo.io/CN=try-solo.io'
 make_leaf gateway '/CN=*/O=any domain'                          glootest 0
-make_leaf client  '/CN=client.glootest.com/O=client organization' glootest 1
+make_leaf client  '/CN=client.try-solo.io/O=client organization' glootest 1
 assert_ok "the gateway certificate was created" test -s "$CERTS/gateway.crt"
 assert_ok "the client certificate was created"  test -s "$CERTS/client.crt"
 

@@ -61,14 +61,14 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 curl -i "$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Next with an invalid JWT we should also be denied access
 ```bash
 curl -i "$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
+  -H "Host: httpbin.try-solo.io" \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0In0.invalidsig"
 ```
 
@@ -101,7 +101,7 @@ This request should be successful
 ```bash
 curl -i "$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
+  -H "Host: httpbin.try-solo.io" \
   -H "Authorization: Bearer $ALICE_TOKEN"
 ```
 
@@ -113,7 +113,7 @@ We should expect a response similar to below
     "Accept": "*/*",
     "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNvbG8tcHVibGljLWtleS0wMDEifQ.eyJpc3MiOiJzb2xvLmlvIiwib3JnIjoic29sby5pbyIsInN1YiI6ImFsaWNlIiwidGVhbSI6ImRldiIsImV4cCI6MjA3NDI3NDg4NCwibGxtcyI6eyJvcGVuYWkiOlsiZ3B0LTMuNS10dXJibyJdfX0.il5Rjsad65jpQR_pyRzBdEKFSj-ERmBf4K2VksvGvswWVv4n79lYERslr4KCECuiz9y_T-xUiQ9IkhW3YHzl5zo1kajhhIg7Nhnl1AvAqODbnF6wYpLRk0Npna_2T6lK3Yj54qQGi6vXG3IMRpo1_o2DrbdlKx2k_WFegCoQyyYazb4z3ZXfWvTiWqQDJA5wWcM3-jKzAWfNM8zgZWa-1BeAHDvpLcfWtuXEGSjkdCW0FQJOTjgIEqACnnXb2Jio0tWgelh9hDPILI-tvanj3iKCjpf3uF6g8QWSBNoVFfu7F1jJgj5Aj1sX8AV-CQVu2aQx3EHRZ1mL_3w3qSRWPw",
     "Content-Type": "application/json",
-    "Host": "httpbin.glootest.com",
+    "Host": "httpbin.try-solo.io",
     "User-Agent": "curl/8.7.1",
     "X-Envoy-Expected-Rq-Timeout-Ms": "15000",
     "X-Envoy-External-Address": "192.168.64.1",
@@ -121,7 +121,7 @@ We should expect a response similar to below
     "X-Team": "dev"
   },
   "origin": "192.168.64.1",
-  "url": "http://httpbin.glootest.com/get"
+  "url": "http://httpbin.try-solo.io/get"
 }
 ```
 
@@ -143,7 +143,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin.glootest.com"
+  - "httpbin.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway
@@ -215,14 +215,14 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 curl -i "$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Next with an invalid JWT we should also be denied access
 ```bash
 curl -i "$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
+  -H "Host: httpbin.try-solo.io" \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0In0.invalidsig"
 ```
 
@@ -255,7 +255,7 @@ This request should be successful
 ```bash
 curl -i "$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
+  -H "Host: httpbin.try-solo.io" \
   -H "Authorization: Bearer $ALICE_TOKEN"
 ```
 
@@ -267,7 +267,7 @@ We should expect a response similar to below
     "Accept": "*/*",
     "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNvbG8tcHVibGljLWtleS0wMDEifQ.eyJpc3MiOiJzb2xvLmlvIiwib3JnIjoic29sby5pbyIsInN1YiI6ImFsaWNlIiwidGVhbSI6ImRldiIsImV4cCI6MjA3NDI3NDg4NCwibGxtcyI6eyJvcGVuYWkiOlsiZ3B0LTMuNS10dXJibyJdfX0.il5Rjsad65jpQR_pyRzBdEKFSj-ERmBf4K2VksvGvswWVv4n79lYERslr4KCECuiz9y_T-xUiQ9IkhW3YHzl5zo1kajhhIg7Nhnl1AvAqODbnF6wYpLRk0Npna_2T6lK3Yj54qQGi6vXG3IMRpo1_o2DrbdlKx2k_WFegCoQyyYazb4z3ZXfWvTiWqQDJA5wWcM3-jKzAWfNM8zgZWa-1BeAHDvpLcfWtuXEGSjkdCW0FQJOTjgIEqACnnXb2Jio0tWgelh9hDPILI-tvanj3iKCjpf3uF6g8QWSBNoVFfu7F1jJgj5Aj1sX8AV-CQVu2aQx3EHRZ1mL_3w3qSRWPw",
     "Content-Type": "application/json",
-    "Host": "httpbin.glootest.com",
+    "Host": "httpbin.try-solo.io",
     "User-Agent": "curl/8.7.1",
     "X-Envoy-Expected-Rq-Timeout-Ms": "15000",
     "X-Envoy-External-Address": "192.168.64.1",
@@ -275,7 +275,7 @@ We should expect a response similar to below
     "X-Team": "dev"
   },
   "origin": "192.168.64.1",
-  "url": "http://httpbin.glootest.com/get"
+  "url": "http://httpbin.try-solo.io/get"
 }
 ```
 
@@ -290,7 +290,7 @@ This request should be successful without a token, becuase the JWT policy is app
 ```bash
 curl -i "$GATEWAY_IP/anything" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 ## Cleanup
@@ -310,7 +310,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin.glootest.com"
+  - "httpbin.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway

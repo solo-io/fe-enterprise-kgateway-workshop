@@ -104,7 +104,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin.glootest.com"
+  - "httpbin.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway
@@ -138,7 +138,7 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 curl -i "$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Output should look similar to below
@@ -162,7 +162,7 @@ x-envoy-upstream-service-time: 10
       "application/json"
     ],
     "Host": [
-      "httpbin.glootest.com"
+      "httpbin.try-solo.io"
     ],
     "User-Agent": [
       "curl/8.7.1"
@@ -184,6 +184,6 @@ x-envoy-upstream-service-time: 10
     ]
   },
   "origin": "10.42.0.1",
-  "url": "http://httpbin.glootest.com/get"
+  "url": "http://httpbin.try-solo.io/get"
 }
 ```

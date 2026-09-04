@@ -124,7 +124,7 @@ Send a few requests to verify they succeed:
 for i in {1..5}; do
   curl -i "$GATEWAY_IP/get" \
     -H "content-type: application/json" \
-    -H "Host: httpbin.glootest.com"
+    -H "Host: httpbin.try-solo.io"
   echo "Request $i completed"
 done
 ```
@@ -144,7 +144,7 @@ Now send more requests to exceed the rate limit (10 per minute):
 for i in {1..15}; do
   curl -i "$GATEWAY_IP/get" \
     -H "content-type: application/json" \
-    -H "Host: httpbin.glootest.com" 2>/dev/null | head -1
+    -H "Host: httpbin.try-solo.io" 2>/dev/null | head -1
   echo "Request $i"
 done
 ```
@@ -239,7 +239,7 @@ Test the per-user rate limiting:
 for i in {1..3}; do
   curl -i "$GATEWAY_IP/get" \
     -H "content-type: application/json" \
-    -H "Host: httpbin.glootest.com" \
+    -H "Host: httpbin.try-solo.io" \
     -H "x-user-id: alice" 2>/dev/null | head -1
   echo "Alice request $i"
 done
@@ -248,7 +248,7 @@ done
 for i in {1..3}; do
   curl -i "$GATEWAY_IP/get" \
     -H "content-type: application/json" \
-    -H "Host: httpbin.glootest.com" \
+    -H "Host: httpbin.try-solo.io" \
     -H "x-user-id: bob" 2>/dev/null | head -1
   echo "Bob request $i"
 done
@@ -257,7 +257,7 @@ done
 for i in {4..6}; do
   curl -i "$GATEWAY_IP/get" \
     -H "content-type: application/json" \
-    -H "Host: httpbin.glootest.com" \
+    -H "Host: httpbin.try-solo.io" \
     -H "x-user-id: alice" 2>/dev/null | head -1
   echo "Alice request $i"
 done
@@ -425,7 +425,7 @@ Test that requests are no longer rate limited:
 for i in {1..15}; do
   curl -i "$GATEWAY_IP/get" \
     -H "content-type: application/json" \
-    -H "Host: httpbin.glootest.com" 2>/dev/null | head -1
+    -H "Host: httpbin.try-solo.io" 2>/dev/null | head -1
   echo "Request $i"
 done
 ```

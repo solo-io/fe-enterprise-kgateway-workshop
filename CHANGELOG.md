@@ -1,5 +1,9 @@
 # Changelog
 
+0.1.2 - (9-4-26)
+---
+- Rename the local demo domain from `glootest.com` to `try-solo.io` across all labs and test scripts (hostnames, TLS SANs, hosts-file instructions)
+
 0.1.1 - (9-2-26)
 ---
 - Update `KGW_VERSION` to `2.3.3`
