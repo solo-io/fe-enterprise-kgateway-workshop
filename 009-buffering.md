@@ -57,7 +57,7 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 curl -i "$GATEWAY_IP/post" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
+  -H "Host: httpbin.try-solo.io" \
   -d '{"message": "This is a small payload that should be accepted"}'
 ```
 
@@ -80,7 +80,7 @@ x-envoy-upstream-service-time: 5
     "Accept": "*/*",
     "Content-Length": "59",
     "Content-Type": "application/json",
-    "Host": "httpbin.glootest.com",
+    "Host": "httpbin.try-solo.io",
     ...
   },
   "json": {
@@ -100,7 +100,7 @@ LARGE_PAYLOAD=$(python3 -c "import json; print(json.dumps({'data': 'x' * 2048}))
 
 curl -i "$GATEWAY_IP/post" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
+  -H "Host: httpbin.try-solo.io" \
   -d "$LARGE_PAYLOAD"
 ```
 
@@ -126,7 +126,7 @@ BOUNDARY_PAYLOAD=$(python3 -c "import json; print(json.dumps({'data': 'x' * 950}
 
 curl -i "$GATEWAY_IP/post" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
+  -H "Host: httpbin.try-solo.io" \
   -d "$BOUNDARY_PAYLOAD"
 ```
 
@@ -160,7 +160,7 @@ LARGE_PAYLOAD=$(python3 -c "import json; print(json.dumps({'data': 'x' * 2048}))
 
 curl -i "$GATEWAY_IP/post" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
+  -H "Host: httpbin.try-solo.io" \
   -d "$LARGE_PAYLOAD"
 ```
 

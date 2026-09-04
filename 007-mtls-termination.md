@@ -10,17 +10,17 @@ This lab assumes that you have completed the setup in `001` and `002`
 
 ## Create a self-signed TLS cert
 
-Create a root certificate for the glootest.com domain. You use this certificate to sign the certificate for your client and gateway later.
+Create a root certificate for the try-solo.io domain. You use this certificate to sign the certificate for your client and gateway later.
 ```bash
 mkdir example_certs
-openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj '/O=Solo.io/CN=glootest.com' -keyout example_certs/glootest.com.key -out example_certs/glootest.com.crt
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj '/O=Solo.io/CN=try-solo.io' -keyout example_certs/try-solo.io.key -out example_certs/try-solo.io.crt
 ```
 
 Create a gateway certificate that is signed by the root CA certificate that you created in the previous step.
 ```bash
 openssl req -out example_certs/gateway.csr -newkey rsa:2048 -nodes -keyout example_certs/gateway.key -subj "/CN=*/O=any domain"
 
-openssl x509 -req -sha256 -days 365 -CA example_certs/glootest.com.crt -CAkey example_certs/glootest.com.key -set_serial 0 -in example_certs/gateway.csr -out example_certs/gateway.crt
+openssl x509 -req -sha256 -days 365 -CA example_certs/try-solo.io.crt -CAkey example_certs/try-solo.io.key -set_serial 0 -in example_certs/gateway.csr -out example_certs/gateway.crt
 ```
 
 Create a Kubernetes secret to store your gateway TLS certificate.
@@ -33,14 +33,14 @@ kubectl create secret tls -n enterprise-kgateway https \
 Create a ConfigMap to store the CA certificate for mTLS client validation.
 ```bash
 kubectl create configmap -n enterprise-kgateway ca-cert \
-  --from-file=ca.crt=example_certs/glootest.com.crt
+  --from-file=ca.crt=example_certs/try-solo.io.crt
 ```
 
 Create a client certificate and private key. You use these credentials later when sending a request to the gateway proxy. The client certificate is signed with the same root CA certificate that you used for the gateway proxy.
 ```bash
-openssl req -out example_certs/client.glootest.com.csr -newkey rsa:2048 -nodes -keyout example_certs/client.glootest.com.key -subj "/CN=client.glootest.com/O=client organization"
+openssl req -out example_certs/client.try-solo.io.csr -newkey rsa:2048 -nodes -keyout example_certs/client.try-solo.io.key -subj "/CN=client.try-solo.io/O=client organization"
 
-openssl x509 -req -sha256 -days 365 -CA example_certs/glootest.com.crt -CAkey example_certs/glootest.com.key -set_serial 1 -in example_certs/client.glootest.com.csr -out example_certs/client.glootest.com.crt
+openssl x509 -req -sha256 -days 365 -CA example_certs/try-solo.io.crt -CAkey example_certs/try-solo.io.key -set_serial 1 -in example_certs/client.try-solo.io.csr -out example_certs/client.try-solo.io.crt
 ```
 
 ## Configure the gateway to terminate mTLS
@@ -89,7 +89,7 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 curl -ikv "https://$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (connection should fail):
@@ -118,9 +118,9 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 curl -ik "https://$GATEWAY_IP/get" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com" \
-  --cert example_certs/client.glootest.com.crt \
-  --key example_certs/client.glootest.com.key \
+  -H "Host: httpbin.try-solo.io" \
+  --cert example_certs/client.try-solo.io.crt \
+  --key example_certs/client.try-solo.io.key \
   --cacert example_certs/gateway.crt
 ```
 
@@ -139,13 +139,13 @@ x-envoy-upstream-service-time: 4
   "args": {},
   "headers": {
     "Accept": "*/*",
-    "Host": "httpbin.glootest.com",
+    "Host": "httpbin.try-solo.io",
     "User-Agent": "curl/8.7.1",
     "X-Envoy-Expected-Rq-Timeout-Ms": "15000",
     "X-Envoy-External-Address": "192.168.64.1"
   },
   "origin": "192.168.64.1",
-  "url": "https://httpbin.glootest.com/get"
+  "url": "https://httpbin.try-solo.io/get"
 }
 ```
 
@@ -184,7 +184,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin.glootest.com"
+  - "httpbin.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway

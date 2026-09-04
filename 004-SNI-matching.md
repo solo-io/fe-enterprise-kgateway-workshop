@@ -1,11 +1,11 @@
 ## SNI Matching
-In this guide, you learn how to set up an HTTPS Gateway that serves two different domains, `httpbin-foo.glootest.com` and `httpbin-bar.glootest.com` on the same port 443. When sending a request to the Gateway, you indicate the hostname you want to connect to. Based on the selected hostname, the Gateway presents the hostname-specific certificate.
+In this guide, you learn how to set up an HTTPS Gateway that serves two different domains, `httpbin-foo.try-solo.io` and `httpbin-bar.try-solo.io` on the same port 443. When sending a request to the Gateway, you indicate the hostname you want to connect to. Based on the selected hostname, the Gateway presents the hostname-specific certificate.
 
 ## Pre-requisites
 This lab assumes that you have completed the setup in `001` and `002`
 
 ## Lab Objectives
-- Create self-signed TLS certs for `httpbin-foo.glootest.com` and `httpbin-bar.glootest.com`
+- Create self-signed TLS certs for `httpbin-foo.try-solo.io` and `httpbin-bar.try-solo.io`
 - Configure our gateway to terminate TLS with SNI matching
 - Validate connectivity to the application over HTTPS
 
@@ -14,37 +14,37 @@ This lab assumes that you have completed the setup in `001` and `002`
 
 ## Create a self-signed TLS cert
 
-Create a root certificate for the glootest.com domain. You use this certificate to sign the certificate for your client and gateway later.
+Create a root certificate for the try-solo.io domain. You use this certificate to sign the certificate for your client and gateway later.
 ```bash
 mkdir example_certs
-openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj '/O=Solo.io/CN=glootest.com' -keyout example_certs/glootest.com.key -out example_certs/glootest.com.crt
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj '/O=Solo.io/CN=try-solo.io' -keyout example_certs/try-solo.io.key -out example_certs/try-solo.io.crt
 ```
 
 Create a gateway certificate that is signed by the root CA certificate that you created in the previous step.
 
-First for httpbin-foo.glootest.com
+First for httpbin-foo.try-solo.io
 ```bash
-openssl req -out example_certs/httpbin-foo.glootest.com.csr -newkey rsa:2048 -nodes -keyout example_certs/httpbin-foo.glootest.com.key -subj "/CN=httpbin-foo.glootest.com/O=httpbin organization"
+openssl req -out example_certs/httpbin-foo.try-solo.io.csr -newkey rsa:2048 -nodes -keyout example_certs/httpbin-foo.try-solo.io.key -subj "/CN=httpbin-foo.try-solo.io/O=httpbin organization"
 
-openssl x509 -req -sha256 -days 365 -CA example_certs/glootest.com.crt -CAkey example_certs/glootest.com.key -set_serial 0 -in example_certs/httpbin-foo.glootest.com.csr -out example_certs/httpbin-foo.glootest.com.crt
+openssl x509 -req -sha256 -days 365 -CA example_certs/try-solo.io.crt -CAkey example_certs/try-solo.io.key -set_serial 0 -in example_certs/httpbin-foo.try-solo.io.csr -out example_certs/httpbin-foo.try-solo.io.crt
 ```
 
-Then for httpbin-bar.glootest.com
+Then for httpbin-bar.try-solo.io
 ```bash
-openssl req -out example_certs/httpbin-bar.glootest.com.csr -newkey rsa:2048 -nodes -keyout example_certs/httpbin-bar.glootest.com.key -subj "/CN=httpbin-bar.glootest.com/O=solo.io"
+openssl req -out example_certs/httpbin-bar.try-solo.io.csr -newkey rsa:2048 -nodes -keyout example_certs/httpbin-bar.try-solo.io.key -subj "/CN=httpbin-bar.try-solo.io/O=solo.io"
 
-openssl x509 -req -sha256 -days 365 -CA example_certs/glootest.com.crt -CAkey example_certs/glootest.com.key -set_serial 1 -in example_certs/httpbin-bar.glootest.com.csr -out example_certs/httpbin-bar.glootest.com.crt
+openssl x509 -req -sha256 -days 365 -CA example_certs/try-solo.io.crt -CAkey example_certs/try-solo.io.key -set_serial 1 -in example_certs/httpbin-bar.try-solo.io.csr -out example_certs/httpbin-bar.try-solo.io.crt
 ```
 
-Store the credentials for the httpbin-foo.glootest.com domain in a Kubernetes secret.
+Store the credentials for the httpbin-foo.try-solo.io domain in a Kubernetes secret.
 ```bash
 kubectl create -n enterprise-kgateway secret tls foo \
---key=example_certs/httpbin-foo.glootest.com.key \
---cert=example_certs/httpbin-foo.glootest.com.crt
+--key=example_certs/httpbin-foo.try-solo.io.key \
+--cert=example_certs/httpbin-foo.try-solo.io.crt
 
 kubectl create -n enterprise-kgateway secret tls bar \
---key=example_certs/httpbin-bar.glootest.com.key \
---cert=example_certs/httpbin-bar.glootest.com.crt
+--key=example_certs/httpbin-bar.try-solo.io.key \
+--cert=example_certs/httpbin-bar.try-solo.io.crt
 ```
 
 ## Set up SNI Routing
@@ -64,7 +64,7 @@ spec:
     - protocol: HTTPS
       port: 443
       name: foo
-      hostname: httpbin-foo.glootest.com
+      hostname: httpbin-foo.try-solo.io
       tls:
         mode: Terminate
         certificateRefs:
@@ -76,7 +76,7 @@ spec:
     - protocol: HTTPS
       port: 443
       name: bar
-      hostname: "httpbin-bar.glootest.com"
+      hostname: "httpbin-bar.try-solo.io"
       tls:
         mode: Terminate
         certificateRefs:
@@ -102,7 +102,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin-foo.glootest.com"
+  - "httpbin-foo.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway
@@ -122,7 +122,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin-bar.glootest.com"
+  - "httpbin-bar.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway
@@ -142,7 +142,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin-baz.glootest.com"
+  - "httpbin-baz.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway
@@ -163,12 +163,12 @@ curl httpbin-foo over https:
 ```bash
 export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.networking.k8s.io/gateway-name=ingress -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}{.items[*].status.loadBalancer.ingress[0].hostname}')
 
-curl -ikv --resolve "httpbin-foo.glootest.com:443:${GATEWAY_IP}" https://httpbin-foo.glootest.com:443/get
+curl -ikv --resolve "httpbin-foo.try-solo.io:443:${GATEWAY_IP}" https://httpbin-foo.try-solo.io:443/get
 ```
 
 We can see the TLS handshake occurring
 ```
-* Connected to httpbin-foo.glootest.com (192.168.64.2) port 443
+* Connected to httpbin-foo.try-solo.io (192.168.64.2) port 443
 * ALPN: curl offers h2,http/1.1
 * (304) (OUT), TLS handshake, Client hello (1):
 * (304) (IN), TLS handshake, Server hello (2):
@@ -180,20 +180,20 @@ We can see the TLS handshake occurring
 * SSL connection using TLSv1.3 / AEAD-CHACHA20-POLY1305-SHA256 / [blank] / UNDEF
 * ALPN: server did not agree on a protocol. Uses default.
 * Server certificate:
-*  subject: CN=httpbin-foo.glootest.com; O=httpbin organization
+*  subject: CN=httpbin-foo.try-solo.io; O=httpbin organization
 *  start date: Dec  4 00:33:14 2025 GMT
 *  expire date: Dec  4 00:33:14 2026 GMT
-*  issuer: O=Solo.io; CN=glootest.com
+*  issuer: O=Solo.io; CN=try-solo.io
 ```
 
 curl httpbin-bar over http:
 ```bash
-curl -ikv --resolve "httpbin-bar.glootest.com:443:${GATEWAY_IP}" https://httpbin-bar.glootest.com:443/get
+curl -ikv --resolve "httpbin-bar.try-solo.io:443:${GATEWAY_IP}" https://httpbin-bar.try-solo.io:443/get
 ```
 
-Again we can see the TLS handshake occurring, but this time for `httpbin-bar.glootest.com`
+Again we can see the TLS handshake occurring, but this time for `httpbin-bar.try-solo.io`
 ```
-* Connected to httpbin-bar.glootest.com (192.168.64.2) port 443
+* Connected to httpbin-bar.try-solo.io (192.168.64.2) port 443
 * ALPN: curl offers h2,http/1.1
 * (304) (OUT), TLS handshake, Client hello (1):
 * (304) (IN), TLS handshake, Server hello (2):
@@ -205,15 +205,15 @@ Again we can see the TLS handshake occurring, but this time for `httpbin-bar.glo
 * SSL connection using TLSv1.3 / AEAD-CHACHA20-POLY1305-SHA256 / [blank] / UNDEF
 * ALPN: server did not agree on a protocol. Uses default.
 * Server certificate:
-*  subject: CN=httpbin-bar.glootest.com; O=solo.io
+*  subject: CN=httpbin-bar.try-solo.io; O=solo.io
 *  start date: Dec  4 00:33:14 2025 GMT
 *  expire date: Dec  4 00:33:14 2026 GMT
-*  issuer: O=Solo.io; CN=glootest.com
+*  issuer: O=Solo.io; CN=try-solo.io
 ```
 
 Now curl httpbin-baz over http:
 ```bash
-curl -ikv --resolve "httpbin-baz.glootest.com:443:${GATEWAY_IP}" https://httpbin-baz.glootest.com:443/get
+curl -ikv --resolve "httpbin-baz.try-solo.io:443:${GATEWAY_IP}" https://httpbin-baz.try-solo.io:443/get
 ```
 
 Although this is a valid route, this request should fail
@@ -268,7 +268,7 @@ metadata:
   namespace: httpbin
 spec:
   hostnames:
-  - "httpbin.glootest.com"
+  - "httpbin.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway

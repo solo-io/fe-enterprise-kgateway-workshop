@@ -11,12 +11,12 @@ cleanup() {
 }
 trap cleanup EXIT
 
-A=tenant-a.glootest.com
-B=tenant-b.glootest.com
-C=tenant-c.glootest.com
+A=tenant-a.try-solo.io
+B=tenant-b.try-solo.io
+C=tenant-c.try-solo.io
 
 step "PKI: one server root, three independent client CAs"
-make_ca glootest    '/O=Solo.io/CN=glootest.com'
+make_ca glootest    '/O=Solo.io/CN=try-solo.io'
 make_ca tenant-a-ca '/O=TenantA/CN=tenant-a.com'
 make_ca tenant-b-ca '/O=TenantB/CN=tenant-b.com'
 make_ca gateway-ca  '/O=GatewayOrg/CN=gateway-ca.com'
@@ -146,7 +146,7 @@ wait_policy_accepted listenerpolicy "$GW_NS" per-listener-mtls-b \
   || fail "ListenerPolicy per-listener-mtls-b is Accepted"
 
 for t in a b c; do
-  host="tenant-${t}.glootest.com"
+  host="tenant-${t}.try-solo.io"
   kubectl apply -f - >/dev/null <<YAML
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

@@ -30,4 +30,4 @@ assert_contains "Envoy propagates the default 15s route timeout to the backend" 
 
 step "Unrouted host is rejected"
 assert_eq "a request for an unrouted Host gets 404" 404 \
-  "$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "http://${GATEWAY_IP}/get" -H 'Host: nope.glootest.com')"
+  "$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "http://${GATEWAY_IP}/get" -H 'Host: nope.try-solo.io')"

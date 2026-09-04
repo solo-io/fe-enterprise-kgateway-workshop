@@ -8,7 +8,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-HEADERS_HOST=httpbin-headers.glootest.com
+HEADERS_HOST=httpbin-headers.try-solo.io
 
 step "Label the existing route"
 kubectl label --overwrite httproute -n "$APP_NS" httpbin-route app=httpbin >/dev/null

@@ -35,7 +35,7 @@ kubectl get httproute -n httpbin httpbin-route --show-labels
 Expected output:
 ```
 NAME            HOSTNAMES                  AGE   LABELS
-httpbin-route   ["httpbin.glootest.com"]   ...   app=httpbin
+httpbin-route   ["httpbin.try-solo.io"]   ...   app=httpbin
 ```
 
 ## Create a global timeout policy
@@ -80,7 +80,7 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 time curl -i "$GATEWAY_IP/delay/2" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (should succeed after ~2 seconds):
@@ -98,7 +98,7 @@ Test with a 5 second delay (should timeout):
 ```bash
 time curl -i "$GATEWAY_IP/delay/5" \
   -H "content-type: application/json" \
-  -H "Host: httpbin.glootest.com"
+  -H "Host: httpbin.try-solo.io"
 ```
 
 Expected output (should timeout after 3 seconds with HTTP 504):
@@ -127,7 +127,7 @@ metadata:
     app: httpbin
 spec:
   hostnames:
-  - "httpbin-headers.glootest.com"
+  - "httpbin-headers.try-solo.io"
   parentRefs:
     - name: ingress
       namespace: enterprise-kgateway
@@ -181,7 +181,7 @@ export GATEWAY_IP=$(kubectl get svc -n enterprise-kgateway --selector=gateway.ne
 
 curl -i "$GATEWAY_IP/headers" \
   -H "content-type: application/json" \
-  -H "Host: httpbin-headers.glootest.com"
+  -H "Host: httpbin-headers.try-solo.io"
 ```
 
 The response headers should show `X-Envoy-Expected-Rq-Timeout-Ms: 3000`, confirming the global policy is applied.
